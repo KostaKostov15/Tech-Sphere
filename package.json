@@ -11,17 +11,24 @@
     "lint:fix": "eslint . --fix"
   },
   "dependencies": {
+    "@headlessui/vue": "^1.7.16",
+    "@heroicons/vue": "^2.0.18",
     "@vuelidate/core": "^2.0.3",
     "@vuelidate/validators": "^2.0.4",
     "axios": "^1.6.2",
+    "heroicons": "^2.0.18",
     "pinia": "^2.1.7",
     "vue": "^3.3.4",
     "vue-router": "^4.2.5"
   },
   "devDependencies": {
     "@antfu/eslint-config": "^1.0.0",
+    "@tailwindcss/aspect-ratio": "^0.4.2",
+    "@tailwindcss/forms": "^0.5.7",
     "@vitejs/plugin-vue": "^4.2.3",
+    "autoprefixer": "^10.4.16",
     "eslint": "^8.51.0",
+    "postcss": "^8.4.32",
     "tailwindcss": "^3.3.6",
     "vite": "^4.4.5",
     "vue-tsc": "^1.8.8"
