@@ -20,6 +20,6 @@ export default antfu({
   rules: {
     'curly': 'off',
     'no-console': 'off',
-    'style/semi': ['error', 'always']
+    'style/semi': ['error', 'always'],
   },
 });
