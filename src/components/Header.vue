@@ -1,8 +1,3 @@
-<!-- eslint-disable vue/no-template-shadow -->
-<!-- eslint-disable vue/prefer-separate-static-class -->
-<!-- eslint-disable vue/html-self-closing -->
-<!-- eslint-disable vue/max-attributes-per-line -->
-
 <script setup>
 import { ref } from 'vue';
 import {
@@ -145,14 +140,14 @@ const navigation = {
   ],
 };
 
-const open = ref(false);
+const isOpen = ref(false);
 </script>
 
 <template>
   <div class="bg-white">
     <!-- Mobile menu -->
-    <TransitionRoot as="template" :show="open">
-      <Dialog as="div" class="relative z-40 lg:hidden" @close="open = false">
+    <TransitionRoot as="template" :show="isOpen">
+      <Dialog as="div" class="relative z-40 lg:hidden" @close="isOpen = false">
         <TransitionChild
           as="template"
           enter="transition-opacity ease-linear duration-300"
@@ -177,7 +172,7 @@ const open = ref(false);
           >
             <DialogPanel class="relative flex w-full max-w-xs flex-col overflow-y-auto bg-white pb-12 shadow-xl">
               <div class="flex px-4 pb-2 pt-5">
-                <button type="button" class="relative -m-2 inline-flex items-center justify-center rounded-md p-2 text-gray-400" @click="open = false">
+                <button type="button" class="relative -m-2 inline-flex items-center justify-center rounded-md p-2 text-gray-400" @click="isOpen = false">
                   <span class="absolute -inset-0.5" />
                   <span class="sr-only">Close menu</span>
                   <XMarkIcon class="h-6 w-6" aria-hidden="true" />
@@ -244,14 +239,6 @@ const open = ref(false);
                   <a href="#" class="-m-2 block p-2 font-medium text-gray-900">Create account</a>
                 </div>
               </div>
-
-              <div class="border-t border-gray-200 px-4 py-6">
-                <a href="#" class="-m-2 flex items-center p-2">
-                  <img src="https://tailwindui.com/img/flags/flag-canada.svg" alt="" class="block h-auto w-5 flex-shrink-0">
-                  <span class="ml-3 block text-base font-medium text-gray-900">CAD</span>
-                  <span class="sr-only">, change currency</span>
-                </a>
-              </div>
             </DialogPanel>
           </TransitionChild>
         </div>
@@ -259,14 +246,10 @@ const open = ref(false);
     </TransitionRoot>
 
     <header class="relative bg-white">
-      <p class="flex h-10 items-center justify-center bg-indigo-600 px-4 text-sm font-medium text-white sm:px-6 lg:px-8">
-        Get free delivery on orders over $100
-      </p>
-
       <nav aria-label="Top" class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div class="border-b border-gray-200">
           <div class="flex h-16 items-center">
-            <button type="button" class="relative rounded-md bg-white p-2 text-gray-400 lg:hidden" @click="open = true">
+            <button type="button" class="relative rounded-md bg-white p-2 text-gray-400 lg:hidden" @click="isOpen = true">
               <span class="absolute -inset-0.5" />
               <span class="sr-only">Open menu</span>
               <Bars3Icon class="h-6 w-6" aria-hidden="true" />
@@ -357,14 +340,6 @@ const open = ref(false);
                 <a href="#" class="text-sm font-medium text-gray-700 hover:text-gray-800">Sign in</a>
                 <span class="h-6 w-px bg-gray-200" aria-hidden="true" />
                 <a href="#" class="text-sm font-medium text-gray-700 hover:text-gray-800">Create account</a>
-              </div>
-
-              <div class="hidden lg:ml-8 lg:flex">
-                <a href="#" class="flex items-center text-gray-700 hover:text-gray-800">
-                  <img src="https://tailwindui.com/img/flags/flag-canada.svg" alt="" class="block h-auto w-5 flex-shrink-0">
-                  <span class="ml-3 block text-sm font-medium">CAD</span>
-                  <span class="sr-only">, change currency</span>
-                </a>
               </div>
 
               <!-- Search -->
