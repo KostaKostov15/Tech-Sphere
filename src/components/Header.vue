@@ -144,7 +144,7 @@ const isOpen = ref(false);
 </script>
 
 <template>
-  <div class="bg-white">
+  <div class="bg-white z-20">
     <!-- Mobile menu -->
     <TransitionRoot as="template" :show="isOpen">
       <Dialog as="div" class="relative z-40 lg:hidden" @close="isOpen = false">
@@ -245,7 +245,7 @@ const isOpen = ref(false);
       </Dialog>
     </TransitionRoot>
 
-    <header class="relative bg-white">
+    <header class="relative bg-white z-40">
       <nav aria-label="Top" class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div class="border-b border-gray-200">
           <div class="flex h-16 items-center">
@@ -257,10 +257,10 @@ const isOpen = ref(false);
 
             <!-- Logo -->
             <div class="ml-4 flex lg:ml-0">
-              <a href="#">
-                <span class="sr-only">Your Company</span>
+              <router-link to="/">
+                <span class="sr-only">Tech Sphere</span>
                 <img class="h-8 w-auto" src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=600" alt="">
-              </a>
+              </router-link>
             </div>
 
             <!-- Flyout menus -->
@@ -337,9 +337,14 @@ const isOpen = ref(false);
 
             <div class="ml-auto flex items-center">
               <div class="hidden lg:flex lg:flex-1 lg:items-center lg:justify-end lg:space-x-6">
-                <a href="#" class="text-sm font-medium text-gray-700 hover:text-gray-800">Sign in</a>
+                <router-link to="/users/login" class="text-sm font-medium text-gray-700 hover:text-gray-800">
+                  Sign in
+                </router-link>
+
                 <span class="h-6 w-px bg-gray-200" aria-hidden="true" />
-                <a href="#" class="text-sm font-medium text-gray-700 hover:text-gray-800">Create account</a>
+                <router-link to="/users/register" class="text-sm font-medium text-gray-700 hover:text-gray-800">
+                  Create account
+                </router-link>
               </div>
 
               <!-- Search -->
