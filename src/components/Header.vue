@@ -17,7 +17,9 @@ import {
 } from '@headlessui/vue';
 import { Bars3Icon, MagnifyingGlassIcon, ShoppingBagIcon, XMarkIcon } from '@heroicons/vue/24/outline';
 import Cart from '../components/Cart.vue';
+
 import { paths } from '../utils/paths';
+import logo from '../assets/logo.png';
 
 const navigation = {
   categories: [
@@ -267,7 +269,7 @@ function toggleCart() {
             <div class="ml-4 flex lg:ml-0">
               <router-link to="/">
                 <span class="sr-only">Tech Sphere</span>
-                <img class="h-8 w-auto" src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=600" alt="">
+                <img class="h-8 w-auto" :src="logo" alt="site-logo">
               </router-link>
             </div>
 
