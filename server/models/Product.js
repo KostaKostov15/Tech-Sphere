@@ -23,6 +23,15 @@ const productSchema = new Schema(
             },
             trim: true,
         },
+        stock: {
+            type: Number,
+            required: [true, 'Stock is required'],
+            validate: {
+                validator: (value) => value > 0,
+                message: 'Stock must be a positive number',
+            },
+            trim: true,
+        },
         brand: { type: String, required: [true, 'Brand is required'], trim: true },
         category: { type: String, required: [true, 'Category is required'], trim: true },
         imageUrl: {
