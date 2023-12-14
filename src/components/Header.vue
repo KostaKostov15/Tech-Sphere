@@ -17,6 +17,7 @@ import {
 } from '@headlessui/vue';
 import { Bars3Icon, MagnifyingGlassIcon, ShoppingBagIcon, XMarkIcon } from '@heroicons/vue/24/outline';
 import Cart from '../components/Cart.vue';
+import { paths } from '../utils/paths';
 
 const navigation = {
   categories: [
@@ -136,8 +137,9 @@ const navigation = {
     },
   ],
   pages: [
-    { name: 'Company', href: '#' },
-    { name: 'Stores', href: '#' },
+    { name: 'Company', to: '#' },
+    { name: 'Stores', to: '#' },
+    { name: 'Add Product', to: paths.addProduct },
   ],
 };
 
@@ -332,23 +334,31 @@ function toggleCart() {
                   </transition>
                 </Popover>
 
-                <a
+                <router-link
                   v-for="page in navigation.pages"
                   :key="page.name"
-                  :href="page.href"
+                  :to="page.to"
                   class="flex items-center text-sm font-medium text-gray-700 hover:text-gray-800"
-                >{{ page.name }}</a>
+                >
+                  {{ page.name }}
+                </router-link>
+                <!-- <a
+                  v-for="page in navigation.pages"
+                  :key="page.name"
+                  :href="page.to"
+                  class="flex items-center text-sm font-medium text-gray-700 hover:text-gray-800"
+                >{{ page.name }}</a> -->
               </div>
             </PopoverGroup>
 
             <div class="ml-auto flex items-center">
               <div class="hidden lg:flex lg:flex-1 lg:items-center lg:justify-end lg:space-x-6">
-                <router-link to="/users/login" class="text-sm font-medium text-gray-700 hover:text-gray-800">
+                <router-link :to="paths.login" class="text-sm font-medium text-gray-700 hover:text-gray-800">
                   Sign in
                 </router-link>
 
                 <span class="h-6 w-px bg-gray-200" aria-hidden="true" />
-                <router-link to="/users/register" class="text-sm font-medium text-gray-700 hover:text-gray-800">
+                <router-link :to="paths.register" class="text-sm font-medium text-gray-700 hover:text-gray-800">
                   Create account
                 </router-link>
               </div>
@@ -362,6 +372,8 @@ function toggleCart() {
               </div>
 
               <!-- Cart -->
+              <Cart v-if="isCartOpen" />
+
               <div class="ml-4 flow-root lg:ml-6">
                 <a class="group -m-2 flex items-center p-2" @click="toggleCart">
                   <ShoppingBagIcon class="h-6 w-6 flex-shrink-0 text-gray-400 group-hover:text-gray-500" aria-hidden="true" />
@@ -369,7 +381,6 @@ function toggleCart() {
                   <span class="sr-only">items in cart, view bag</span>
                 </a>
               </div>
-              <Cart v-if="isCartOpen" />
             </div>
           </div>
         </div>
