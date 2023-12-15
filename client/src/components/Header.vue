@@ -22,7 +22,7 @@ import { paths } from '../utils/paths';
 import logo from '../assets/logo.png';
 import { useAuthStore } from '../store/authStore';
 
-const { getIsAuth } = useAuthStore();
+const { getIsAuth, logoutUser } = useAuthStore();
 
 const navigation = {
   categories: [
@@ -153,6 +153,10 @@ const isCartOpen = ref(false);
 
 function toggleCart() {
   isCartOpen.value = !isCartOpen.value;
+}
+
+async function logoutHandler() {
+  await logoutUser();
 }
 </script>
 
@@ -372,9 +376,9 @@ function toggleCart() {
                 </div>
               </template>
               <template v-else>
-                <a class="text-sm font-medium text-gray-700 hover:text-gray-800">
+                <button class="text-sm font-medium text-gray-700 hover:text-gray-800" @click="logoutHandler">
                   Logout
-                </a>
+                </button>
               </template>
 
               <!-- Cart -->
