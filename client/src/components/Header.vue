@@ -22,7 +22,7 @@ import { paths } from '../utils/paths';
 import logo from '../assets/logo.png';
 import { useAuthStore } from '../store/authStore';
 
-const { isAuthenticated } = useAuthStore();
+const { getIsAuth } = useAuthStore();
 
 const navigation = {
   categories: [
@@ -347,25 +347,11 @@ function toggleCart() {
                 >
                   {{ page.name }}
                 </router-link>
-                <!-- <a
-                  v-for="page in navigation.pages"
-                  :key="page.name"
-                  :href="page.to"
-                  class="flex items-center text-sm font-medium text-gray-700 hover:text-gray-800"
-                >{{ page.name }}</a> -->
               </div>
             </PopoverGroup>
 
             <div class="ml-auto flex items-center">
-              <!-- Search -->
-              <div class="flex lg:ml-6">
-                <a href="#" class="p-2 text-gray-400 hover:text-gray-500">
-                  <span class="sr-only">Search</span>
-                  <MagnifyingGlassIcon class="h-6 w-6" aria-hidden="true" />
-                </a>
-              </div>
-
-              <template v-if="!isAuthenticated">
+              <template v-if="!getIsAuth()">
                 <div class="hidden lg:flex lg:flex-1 lg:items-center lg:justify-end lg:space-x-6">
                   <router-link :to="paths.login" class="text-sm font-medium text-gray-700 hover:text-gray-800">
                     Sign in
@@ -393,6 +379,14 @@ function toggleCart() {
 
               <!-- Cart -->
               <Cart v-if="isCartOpen" />
+
+              <!-- Search -->
+              <div class="flex lg:ml-6">
+                <a href="#" class="p-2 text-gray-400 hover:text-gray-500">
+                  <span class="sr-only">Search</span>
+                  <MagnifyingGlassIcon class="h-6 w-6" aria-hidden="true" />
+                </a>
+              </div>
             </div>
           </div>
         </div>

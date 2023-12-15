@@ -33,5 +33,8 @@ export const useAuthStore = defineStore('auth', {
       this.isAuthenticated = false;
       localStorage.removeItem('auth');
     },
+    getIsAuth() {
+      return this.isAuthenticated;
+    },
   },
 });
