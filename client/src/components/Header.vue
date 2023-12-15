@@ -20,6 +20,9 @@ import Cart from '../components/Cart.vue';
 
 import { paths } from '../utils/paths';
 import logo from '../assets/logo.png';
+import { useAuthStore } from '../store/authStore';
+
+const { isAuthenticated } = useAuthStore();
 
 const navigation = {
   categories: [
@@ -354,17 +357,6 @@ function toggleCart() {
             </PopoverGroup>
 
             <div class="ml-auto flex items-center">
-              <div class="hidden lg:flex lg:flex-1 lg:items-center lg:justify-end lg:space-x-6">
-                <router-link :to="paths.login" class="text-sm font-medium text-gray-700 hover:text-gray-800">
-                  Sign in
-                </router-link>
-
-                <span class="h-6 w-px bg-gray-200" aria-hidden="true" />
-                <router-link :to="paths.register" class="text-sm font-medium text-gray-700 hover:text-gray-800">
-                  Create account
-                </router-link>
-              </div>
-
               <!-- Search -->
               <div class="flex lg:ml-6">
                 <a href="#" class="p-2 text-gray-400 hover:text-gray-500">
@@ -373,16 +365,34 @@ function toggleCart() {
                 </a>
               </div>
 
+              <template v-if="!isAuthenticated">
+                <div class="hidden lg:flex lg:flex-1 lg:items-center lg:justify-end lg:space-x-6">
+                  <router-link :to="paths.login" class="text-sm font-medium text-gray-700 hover:text-gray-800">
+                    Sign in
+                  </router-link>
+
+                  <span class="h-6 w-px bg-gray-200" aria-hidden="true" />
+                  <router-link :to="paths.register" class="text-sm font-medium text-gray-700 hover:text-gray-800">
+                    Create account
+                  </router-link>
+                </div>
+
+                <div class="ml-4 flow-root lg:ml-6">
+                  <a class="group -m-2 flex items-center p-2" @click="toggleCart">
+                    <ShoppingBagIcon class="h-6 w-6 flex-shrink-0 text-gray-400 group-hover:text-gray-500" aria-hidden="true" />
+                    <span class="ml-2 text-sm font-medium text-gray-700 group-hover:text-gray-800">0</span>
+                    <span class="sr-only">items in cart, view bag</span>
+                  </a>
+                </div>
+              </template>
+              <template v-else>
+                <a class="text-sm font-medium text-gray-700 hover:text-gray-800">
+                  Logout
+                </a>
+              </template>
+
               <!-- Cart -->
               <Cart v-if="isCartOpen" />
-
-              <div class="ml-4 flow-root lg:ml-6">
-                <a class="group -m-2 flex items-center p-2" @click="toggleCart">
-                  <ShoppingBagIcon class="h-6 w-6 flex-shrink-0 text-gray-400 group-hover:text-gray-500" aria-hidden="true" />
-                  <span class="ml-2 text-sm font-medium text-gray-700 group-hover:text-gray-800">0</span>
-                  <span class="sr-only">items in cart, view bag</span>
-                </a>
-              </div>
             </div>
           </div>
         </div>
