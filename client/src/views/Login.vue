@@ -2,7 +2,7 @@
 import { computed, reactive, ref } from 'vue';
 import { useRouter } from 'vue-router';
 import useVuelidate from '@vuelidate/core';
-import { email, minValue, required } from '@vuelidate/validators';
+import { email, helpers, minLength, required } from '@vuelidate/validators';
 
 import { useAuthStore } from '../store/authStore';
 
@@ -19,8 +19,13 @@ const userData = reactive({
 });
 
 const rules = computed(() => ({
-  email: { required, email },
-  password: { required, minValue: minValue(6) },
+  email: { required: helpers.withMessage('Email is required', required), email: helpers.withMessage('Please enter a valid email address', email) },
+  password: { required: helpers.withMessage('Password is required', required),minLength: helpers.withMessage(
+      ({
+        $params,
+      }) => `Password must be at least ${$params.min} characters`,
+      minLength(6),
+    ) },
 }));
 const v$ = useVuelidate(rules, userData);
 
@@ -28,6 +33,7 @@ async function submitHandler() {
   isLoading.value = true;
 
   const isValid = await v$.value.$validate();
+
   if (isValid) {
     await loginUser(userData.email, userData.password);
     router.push('/');
@@ -47,7 +53,12 @@ async function submitHandler() {
     </div>
 
     <div class="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
-      <form class="space-y-6" :disabled="isLoading" @submit.prevent="submitHandler">
+      <form
+        class="space-y-6"
+        :disabled="isLoading"
+        autocomplete="off"
+        @submit.prevent="submitHandler"
+      >
         <div>
           <label for="email" class="block text-sm font-medium leading-6 text-gray-900">Email address</label>
           <div class="mt-2">
@@ -60,6 +71,11 @@ async function submitHandler() {
             >
           </div>
         </div>
+        <ul v-if="v$.email.$errors.length">
+          <li v-for="error in v$.email.$errors" :key="error.$uid">
+            {{ error.$message }}
+          </li>
+        </ul>
 
         <div>
           <div class="flex items-center justify-between">
@@ -75,6 +91,11 @@ async function submitHandler() {
             >
           </div>
         </div>
+        <ul v-if="v$.password.$errors.length">
+          <li v-for="error in v$.password.$errors" :key="error.$uid">
+            {{ error.$message }}
+          </li>
+        </ul>
 
         <div>
           <button type="submit" class="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">
