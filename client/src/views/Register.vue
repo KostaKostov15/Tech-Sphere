@@ -2,7 +2,7 @@
 import { computed, reactive, ref } from 'vue';
 import { useRouter } from 'vue-router';
 import useVuelidate from '@vuelidate/core';
-import { email, minLength, minValue, required } from '@vuelidate/validators';
+import { email, helpers, minLength, required, sameAs } from '@vuelidate/validators';
 
 import { useAuthStore } from '../store/authStore';
 
@@ -21,18 +21,26 @@ const userData = reactive({
 });
 
 const rules = computed(() => ({
-  email: { required, email },
+  email: { required: helpers.withMessage('Email is required', required), email: helpers.withMessage('Please enter a valid email address', email) },
   username: { required, minLength: minLength(5) },
-  password: { required, minValue: minValue(6) },
-  rePassword: { required, minValue: minValue(6) },
+  password: { required: helpers.withMessage('Password is required', required),minLength: helpers.withMessage(
+      ({ $params }) => `Password must be at least ${$params.min} characters`,
+      minLength(6),
+    ) },
+  rePassword: { required: helpers.withMessage('Confirm Password is required', required), sameAs: helpers.withMessage(() => `Passwords must be equal`, sameAs(userData.password)) },
 }));
 const v$ = useVuelidate(rules, userData);
 
 async function submitHandler() {
   isLoading.value = true;
 
-  const isValid = await v$.value.$validate();
-  if (isValid) {
+  v$.value.$touch();
+  if (v$.value.$invalid) {
+    // eslint-disable-next-line no-alert
+    alert('Invalid Form');
+    return false;
+  }
+  else {
     await registerUser(userData.email, userData.username, userData.password);
     router.push('/');
   }
@@ -51,7 +59,12 @@ async function submitHandler() {
     </div>
 
     <div class="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
-      <form class="space-y-6" :disabled="isLoading" @submit.prevent="submitHandler">
+      <form
+        class="space-y-6"
+        :disabled="isLoading"
+        novalidate
+        @submit.prevent="submitHandler"
+      >
         <div>
           <label for="email" class="block text-sm font-medium leading-6 text-gray-900">Email address</label>
           <div class="mt-2">
@@ -63,6 +76,11 @@ async function submitHandler() {
               class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
             >
           </div>
+          <ul v-if="v$.email.$errors.length">
+            <li v-for="error in v$.email.$errors" :key="error.$uid" class="mt-1 text-sm leading-6 text-red-600">
+              {{ error.$message }}
+            </li>
+          </ul>
         </div>
 
         <div>
@@ -76,6 +94,11 @@ async function submitHandler() {
               class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
             >
           </div>
+          <ul v-if="v$.username.$errors.length">
+            <li v-for="error in v$.username.$errors" :key="error.$uid" class="mt-1 text-sm leading-6 text-red-600">
+              {{ error.$message }}
+            </li>
+          </ul>
         </div>
 
         <div>
@@ -91,6 +114,11 @@ async function submitHandler() {
               class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
             >
           </div>
+          <ul v-if="v$.password.$errors.length">
+            <li v-for="error in v$.password.$errors" :key="error.$uid" class="mt-1 text-sm leading-6 text-red-600">
+              {{ error.$message }}
+            </li>
+          </ul>
         </div>
 
         <div>
@@ -106,6 +134,11 @@ async function submitHandler() {
               class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
             >
           </div>
+          <ul v-if="v$.rePassword.$errors.length">
+            <li v-for="error in v$.rePassword.$errors" :key="error.$uid" class="mt-1 text-sm leading-6 text-red-600">
+              {{ error.$message }}
+            </li>
+          </ul>
         </div>
 
         <div>

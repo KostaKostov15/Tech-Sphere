@@ -20,12 +20,12 @@ const userData = reactive({
 
 const rules = computed(() => ({
   email: { required: helpers.withMessage('Email is required', required), email: helpers.withMessage('Please enter a valid email address', email) },
-  password: { required: helpers.withMessage('Password is required', required),minLength: helpers.withMessage(
-      ({
-        $params,
-      }) => `Password must be at least ${$params.min} characters`,
-      minLength(6),
-    ) },
+  password: { required: helpers.withMessage('Password is required', required), minLength: helpers.withMessage(
+    ({
+      $params,
+    }) => `Password must be at least ${$params.min} characters`,
+    minLength(6),
+  ) },
 }));
 const v$ = useVuelidate(rules, userData);
 
@@ -70,12 +70,12 @@ async function submitHandler() {
               class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
             >
           </div>
+          <ul v-if="v$.email.$errors.length">
+            <li v-for="error in v$.email.$errors" :key="error.$uid" class="mt-1 text-sm leading-6 text-red-600">
+              {{ error.$message }}
+            </li>
+          </ul>
         </div>
-        <ul v-if="v$.email.$errors.length">
-          <li v-for="error in v$.email.$errors" :key="error.$uid">
-            {{ error.$message }}
-          </li>
-        </ul>
 
         <div>
           <div class="flex items-center justify-between">
@@ -90,12 +90,12 @@ async function submitHandler() {
               class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
             >
           </div>
+          <ul v-if="v$.password.$errors.length">
+            <li v-for="error in v$.password.$errors" :key="error.$uid" class="mt-1 text-sm leading-6 text-red-600">
+              {{ error.$message }}
+            </li>
+          </ul>
         </div>
-        <ul v-if="v$.password.$errors.length">
-          <li v-for="error in v$.password.$errors" :key="error.$uid">
-            {{ error.$message }}
-          </li>
-        </ul>
 
         <div>
           <button type="submit" class="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">
