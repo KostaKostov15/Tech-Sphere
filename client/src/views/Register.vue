@@ -7,6 +7,7 @@ import { email, helpers, minLength, required, sameAs } from '@vuelidate/validato
 import { useAuthStore } from '../store/authStore';
 
 import logo from '../assets/logo.png';
+import { paths } from '../utils/paths';
 
 const { registerUser } = useAuthStore();
 const router = useRouter();
@@ -42,7 +43,7 @@ async function submitHandler() {
   }
   else {
     await registerUser(userData.email, userData.username, userData.password);
-    router.push('/');
+    router.push(paths.home);
   }
 
   isLoading.value = false;
@@ -61,9 +62,9 @@ async function submitHandler() {
     <div class="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
       <form
         class="space-y-6"
-        :disabled="isLoading"
         novalidate
         autocomplete="off"
+        :disabled="isLoading"
         @submit.prevent="submitHandler"
       >
         <div>

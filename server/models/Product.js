@@ -12,15 +12,6 @@ const productSchema = new Schema(
         imageUrl: {
             type: String,
             required: [true, 'imageUrl is required'],
-            validate: {
-                validator: (value) =>
-                    validator.isURL(value, {
-                        protocols: ['http', 'https', 'ftp'],
-                        require_tld: true,
-                        require_protocol: true,
-                    }),
-                message: 'Must be a Valid URL',
-            },
             trim: true,
         },
         price: {
@@ -41,7 +32,7 @@ const productSchema = new Schema(
             },
             trim: true,
         },
-        discountPercentage: {
+        discount: {
             type: Number,
             required: [true, 'Discount is required'],
             validate: {
