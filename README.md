@@ -33,7 +33,7 @@ To set up database MongoDB Tools should be installed on the machine. In console 
 mongorestore --db=tech-sphere <path to db files>
 `**
 
-Dump files can be found [here](https://github.com/KostaKostov15/Anglers-Hub/tree/main/db/anglers-hub)
+Dump files can be found [here](https://github.com/KostaKostov15/Tech-Sphere/tree/main/db/tech-sphere)
 
 
 ## Server: 
