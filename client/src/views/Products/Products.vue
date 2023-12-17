@@ -6,8 +6,7 @@ import ProductItem from './ProductItem.vue';
 const products = ref([]);
 
 onMounted(async () => {
-  const fetchedProducts = await getAll();
-  products.value = fetchedProducts;
+  products.value = await getAll();
 });
 </script>
 

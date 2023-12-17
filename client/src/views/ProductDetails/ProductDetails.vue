@@ -1,16 +1,18 @@
 <script setup>
-import { ref } from 'vue';
+import { onMounted, ref } from 'vue';
 import { StarIcon } from '@heroicons/vue/20/solid';
 import { RadioGroup, RadioGroupLabel, RadioGroupOption } from '@headlessui/vue';
+import { useRoute } from 'vue-router';
+import { getById } from '../../services/productService';
 
-const product = {
+const route = useRoute();
+const product = ref({});
+
+const product2 = {
   name: 'Basic Tee 6-Pack',
   price: '$192',
   href: '#',
-  breadcrumbs: [
-    { id: 1, name: 'Men', href: '#' },
-    { id: 2, name: 'Clothing', href: '#' },
-  ],
+
   images: [
     {
       src: 'https://tailwindui.com/img/ecommerce-images/product-page-02-secondary-product-shot.jpg',
@@ -56,52 +58,32 @@ const product = {
       'The 6-Pack includes two black, two white, and two heather gray Basic Tees. Sign up for our subscription service and be the first to get new, exciting colors, like our upcoming "Charcoal Gray" limited release.',
 };
 const reviews = { href: '#', average: 4, totalCount: 117 };
+const selectedColor = ref(product2.colors[0]);
+const selectedSize = ref(product2.sizes[2]);
 
-const selectedColor = ref(product.colors[0]);
-const selectedSize = ref(product.sizes[2]);
+onMounted(async () => {
+  product.value = await getById(route.params.productId);
+});
 </script>
 
 <template>
   <div class="bg-white">
     <div class="pt-6">
-      <nav aria-label="Breadcrumb">
-        <ol role="list" class="mx-auto flex max-w-2xl items-center space-x-2 px-4 sm:px-6 lg:max-w-7xl lg:px-8">
-          <li v-for="breadcrumb in product.breadcrumbs" :key="breadcrumb.id">
-            <div class="flex items-center">
-              <a :href="breadcrumb.href" class="mr-2 text-sm font-medium text-gray-900">{{ breadcrumb.name }}</a>
-              <svg
-                width="16"
-                height="20"
-                viewBox="0 0 16 20"
-                fill="currentColor"
-                aria-hidden="true"
-                class="h-5 w-4 text-gray-300"
-              >
-                <path d="M5.697 4.34L8.98 16.532h1.327L7.025 4.341H5.697z" />
-              </svg>
-            </div>
-          </li>
-          <li class="text-sm">
-            <a :href="product.href" aria-current="page" class="font-medium text-gray-500 hover:text-gray-600">{{ product.name }}</a>
-          </li>
-        </ol>
-      </nav>
-
       <!-- Image gallery -->
       <div class="mx-auto mt-6 max-w-2xl sm:px-6 lg:grid lg:max-w-7xl lg:grid-cols-3 lg:gap-x-8 lg:px-8">
         <div class="aspect-h-4 aspect-w-3 hidden overflow-hidden rounded-lg lg:block">
-          <img :src="product.images[0].src" :alt="product.images[0].alt" class="h-full w-full object-cover object-center">
+          <img :src="product2.images[0].src" :alt="product2.images[0].alt" class="h-full w-full object-cover object-center">
         </div>
         <div class="hidden lg:grid lg:grid-cols-1 lg:gap-y-8">
           <div class="aspect-h-2 aspect-w-3 overflow-hidden rounded-lg">
-            <img :src="product.images[1].src" :alt="product.images[1].alt" class="h-full w-full object-cover object-center">
+            <img :src="product2.images[1].src" :alt="product2.images[1].alt" class="h-full w-full object-cover object-center">
           </div>
           <div class="aspect-h-2 aspect-w-3 overflow-hidden rounded-lg">
-            <img :src="product.images[2].src" :alt="product.images[2].alt" class="h-full w-full object-cover object-center">
+            <img :src="product2.images[2].src" :alt="product2.images[2].alt" class="h-full w-full object-cover object-center">
           </div>
         </div>
         <div class="aspect-h-5 aspect-w-4 lg:aspect-h-4 lg:aspect-w-3 sm:overflow-hidden sm:rounded-lg">
-          <img :src="product.images[3].src" :alt="product.images[3].alt" class="h-full w-full object-cover object-center">
+          <img :src="product2.images[3].src" :alt="product2.images[3].alt" class="h-full w-full object-cover object-center">
         </div>
       </div>
 
@@ -109,7 +91,7 @@ const selectedSize = ref(product.sizes[2]);
       <div class="mx-auto max-w-2xl px-4 pb-16 pt-10 sm:px-6 lg:grid lg:max-w-7xl lg:grid-cols-3 lg:grid-rows-[auto,auto,1fr] lg:gap-x-8 lg:px-8 lg:pb-24 lg:pt-16">
         <div class="lg:col-span-2 lg:border-r lg:border-gray-200 lg:pr-8">
           <h1 class="text-2xl font-bold tracking-tight text-gray-900 sm:text-3xl">
-            {{ product.name }}
+            {{ product2.name }}
           </h1>
         </div>
 
@@ -119,7 +101,7 @@ const selectedSize = ref(product.sizes[2]);
             Product information
           </h2>
           <p class="text-3xl tracking-tight text-gray-900">
-            {{ product.price }}
+            {{ product2.price }}
           </p>
 
           <!-- Reviews -->
@@ -157,7 +139,7 @@ const selectedSize = ref(product.sizes[2]);
                 </RadioGroupLabel>
                 <div class="flex items-center space-x-3">
                   <RadioGroupOption
-                    v-for="color in product.colors"
+                    v-for="color in product2.colors"
                     :key="color.name"
                     v-slot="{ active, checked }"
                     as="template"
@@ -189,7 +171,7 @@ const selectedSize = ref(product.sizes[2]);
                 </RadioGroupLabel>
                 <div class="grid grid-cols-4 gap-4 sm:grid-cols-8 lg:grid-cols-4">
                   <RadioGroupOption
-                    v-for="size in product.sizes"
+                    v-for="size in product2.sizes"
                     :key="size.name"
                     v-slot="{ active, checked }"
                     as="template"
@@ -243,7 +225,7 @@ const selectedSize = ref(product.sizes[2]);
 
             <div class="space-y-6">
               <p class="text-base text-gray-900">
-                {{ product.description }}
+                {{ product2.description }}
               </p>
             </div>
           </div>
@@ -255,7 +237,7 @@ const selectedSize = ref(product.sizes[2]);
 
             <div class="mt-4">
               <ul role="list" class="list-disc space-y-2 pl-4 text-sm">
-                <li v-for="highlight in product.highlights" :key="highlight" class="text-gray-400">
+                <li v-for="highlight in product2.highlights" :key="highlight" class="text-gray-400">
                   <span class="text-gray-600">{{ highlight }}</span>
                 </li>
               </ul>
@@ -264,12 +246,12 @@ const selectedSize = ref(product.sizes[2]);
 
           <div class="mt-10">
             <h2 class="text-sm font-medium text-gray-900">
-              Details
+              Description
             </h2>
 
             <div class="mt-4 space-y-6">
               <p class="text-sm text-gray-600">
-                {{ product.details }}
+                {{ product.description }}
               </p>
             </div>
           </div>
