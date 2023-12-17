@@ -60,8 +60,7 @@ export default {
     },
   ],
   pages: [
-    { name: 'Company', to: '#', validation: false },
-    { name: 'Stores', to: '#', validation: false },
+    { name: 'Store', to: paths.store, validation: false },
     { name: 'Add Product', to: paths.addProduct, validation: true },
   ],
 };
