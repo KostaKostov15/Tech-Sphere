@@ -8,7 +8,7 @@ const { isGuest, hasUser } = require('../middlewares/guards');
 authController.post(
     '/register',
     body('email').isEmail().withMessage('Invalid Email'),
-    body('password').isLength({ min: 6 }).withMessage('Password must be at least 6 characters long'),
+    body('password').isLength({ min: 6 }).withMessage('Password must be at least 6 characters'),
     isGuest(),
     async (req, res) => {
         try {

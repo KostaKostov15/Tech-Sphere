@@ -23,10 +23,10 @@ const userData = reactive({
 const rules = computed(() => ({
   email: { required: helpers.withMessage('Email is required', required), email: helpers.withMessage('Please enter a valid email address', email) },
   username: { required, minLength: minLength(5) },
-  password: { required: helpers.withMessage('Password is required', required),minLength: helpers.withMessage(
-      ({ $params }) => `Password must be at least ${$params.min} characters`,
-      minLength(6),
-    ) },
+  password: { required: helpers.withMessage('Password is required', required), minLength: helpers.withMessage(
+    ({ $params }) => `Password must be at least ${$params.min} characters`,
+    minLength(6),
+  ) },
   rePassword: { required: helpers.withMessage('Confirm Password is required', required), sameAs: helpers.withMessage(() => `Passwords must be equal`, sameAs(userData.password)) },
 }));
 const v$ = useVuelidate(rules, userData);
@@ -63,6 +63,7 @@ async function submitHandler() {
         class="space-y-6"
         :disabled="isLoading"
         novalidate
+        autocomplete="off"
         @submit.prevent="submitHandler"
       >
         <div>
