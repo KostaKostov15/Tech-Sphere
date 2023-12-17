@@ -2,6 +2,7 @@
 import { ref } from 'vue';
 import { Popover, PopoverButton, PopoverGroup, PopoverPanel } from '@headlessui/vue';
 import { Bars3Icon, ShoppingBagIcon } from '@heroicons/vue/24/outline';
+import { useRouter } from 'vue-router';
 import logo from '../../assets/logo.png';
 
 import { useAuthStore } from '../../store/authStore';
@@ -14,6 +15,7 @@ const { getIsAuth, logoutUser } = useAuthStore();
 
 const isOpen = ref(false);
 const isCartOpen = ref(false);
+const router = useRouter();
 
 function toggleCart() {
   isCartOpen.value = !isCartOpen.value;
@@ -21,6 +23,8 @@ function toggleCart() {
 
 async function logoutHandler() {
   await logoutUser();
+
+  router.push(paths.home);
 }
 
 function changeIsOpen(value) {
