@@ -11,7 +11,7 @@ import navigation from '../../utils/navigation';
 import { paths } from '../../utils/paths';
 import MobileHeader from './MobileHeader.vue';
 
-const { getIsAuth, logoutUser } = useAuthStore();
+const { getIsAuth, logoutUser, user } = useAuthStore();
 
 const isOpen = ref(false);
 const isCartOpen = ref(false);
@@ -145,6 +145,9 @@ function changeIsOpen(value) {
               </template>
 
               <template v-else>
+                <p class="mr-8 flex items-center text-sm font-medium text-gray-700 hover:text-gray-800">
+                  {{ user.email }}
+                </p>
                 <button class="text-sm font-medium text-gray-700 hover:text-gray-800" @click="logoutHandler">
                   Logout
                 </button>
