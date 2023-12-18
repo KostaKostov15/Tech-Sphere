@@ -6,6 +6,7 @@ import Home from '../views/Home.vue';
 import Login from '../views/Login.vue';
 import Register from '../views/Register.vue';
 import AddProduct from '../views/AddProduct/AddProduct.vue';
+import EditProduct from '../views/EditProduct/EditProduct.vue';
 import Products from '../views/Products/Products.vue';
 import ProductDetails from '../views/ProductDetails/ProductDetails.vue';
 import NotFound from '../views/NotFound.vue';
@@ -31,6 +32,7 @@ const routes = [
   { path: '/add-product', component: AddProduct, beforeEnter: validateIsAuth },
   { path: '/store', component: Products },
   { path: '/store/:productId/details', component: ProductDetails },
+  { path: '/store/:productId/edit', component: EditProduct },
   { path: '/:pathMatch(.*)*', component: NotFound },
 ];
 
