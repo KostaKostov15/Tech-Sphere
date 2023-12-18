@@ -7,7 +7,7 @@ import { paths } from '../../utils/paths';
 
 const route = useRoute();
 const router = useRouter();
-const { getIsAuth } = useAuthStore();
+const { getIsAuth, user } = useAuthStore();
 const product = ref({});
 
 onMounted(async () => {
@@ -60,7 +60,7 @@ async function deleteHandler() {
           </div>
 
           <!-- Actions if the User is Owner of the record -->
-          <template v-if="getIsAuth()">
+          <template v-if="getIsAuth() && user._id === product.owner?._id">
             <router-link :to="`/store/${product._id}/edit`">
               <button class="mt-6 flex w-full items-center justify-center rounded-md border border-transparent bg-indigo-600 px-8 py-3 text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
                 Edit

@@ -1,15 +1,15 @@
 <script setup>
 import useVuelidate from '@vuelidate/core';
 import { helpers, maxLength, maxValue, minLength, minValue, required, url } from '@vuelidate/validators';
-import { computed, reactive, ref } from 'vue';
+import { computed, onMounted, ref } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
-import { update } from '../../services/productService';
+import { getById, update } from '../../services/productService';
 
 const router = useRouter();
 const route = useRoute();
 const isLoading = ref(false);
 
-const productData = reactive({
+const product = ref({
   category: '',
   brand: '',
   title: '',
@@ -18,6 +18,10 @@ const productData = reactive({
   stock: 0,
   discount: 0,
   description: '',
+});
+
+onMounted(async () => {
+  product.value = await getById(route.params.productId);
 });
 
 const rules = computed(() => ({
@@ -31,7 +35,7 @@ const rules = computed(() => ({
   description: { required: helpers.withMessage('Description is required', required), minLength: helpers.withMessage(() => 'Description must be at least 10 characters', minLength(10)), maxLength: helpers.withMessage(() => 'Description must not exceed 900 characters', maxLength(900)) },
 }));
 
-const v$ = useVuelidate(rules, productData);
+const v$ = useVuelidate(rules, product);
 
 async function submitHandler() {
   isLoading.value = true;
@@ -43,7 +47,7 @@ async function submitHandler() {
     return false;
   }
   else {
-    await update(route.params.productId, productData);
+    await update(route.params.productId, product.value);
     router.push(`/store/${route.params.productId}/details`);
   }
 

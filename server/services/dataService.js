@@ -27,12 +27,14 @@ async function create(data) {
 async function update(id, data) {
     const existing = await Product.findById(id);
 
-    // TODO: update with correct fields
-
-    existing.weather = data.weather;
-    existing.region = data.region;
+    existing.category = data.category;
+    existing.brand = data.brand;
+    existing.title = data.title;
     existing.imageUrl = data.imageUrl;
-    existing.details = data.details;
+    existing.price = data.price;
+    existing.stock = data.stock;
+    existing.discount = data.discount;
+    existing.description = data.description;
 
     await existing.save();
 

@@ -3,6 +3,7 @@ import { ref } from 'vue';
 import { Popover, PopoverButton, PopoverGroup, PopoverPanel } from '@headlessui/vue';
 import { Bars3Icon, ShoppingBagIcon } from '@heroicons/vue/24/outline';
 import { useRouter } from 'vue-router';
+import { storeToRefs } from 'pinia';
 import logo from '../../assets/logo.png';
 
 import { useAuthStore } from '../../store/authStore';
@@ -11,7 +12,9 @@ import navigation from '../../utils/navigation';
 import { paths } from '../../utils/paths';
 import MobileHeader from './MobileHeader.vue';
 
-const { getIsAuth, logoutUser, user } = useAuthStore();
+const { getIsAuth, logoutUser } = useAuthStore();
+const authStore = useAuthStore();
+const { user } = storeToRefs(authStore);
 
 const isOpen = ref(false);
 const isCartOpen = ref(false);
