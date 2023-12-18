@@ -35,6 +35,12 @@ authController.post('/login', isGuest(), async (req, res) => {
     }
 });
 
+authController.get('/logout', async (req, res) => {
+    const token = req.token;
+    await logout(token);
+    res.status(204).end();
+});
+
 authController.get('/:id/profile', hasUser(), async (req, res) => {
     try {
         const user = await getById(req.params.id);
@@ -44,12 +50,6 @@ authController.get('/:id/profile', hasUser(), async (req, res) => {
         const message = parseError(error);
         res.status(404).json({ message });
     }
-});
-
-authController.get('/logout', async (req, res) => {
-    const token = req.token;
-    await logout(token);
-    res.status(204).end();
 });
 
 module.exports = authController;

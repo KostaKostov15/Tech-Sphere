@@ -1,13 +1,18 @@
 <script setup>
 import { onMounted, ref } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
+import { storeToRefs } from 'pinia';
 import { getById, remove } from '../../services/productService';
 import { useAuthStore } from '../../store/authStore';
+import { useCartStore } from '../../store/cartStore';
 import { paths } from '../../utils/paths';
 
 const route = useRoute();
 const router = useRouter();
-const { getIsAuth, user } = useAuthStore();
+const { addToCart } = useCartStore();
+const authStore = useAuthStore();
+const { user, isAuthenticated } = storeToRefs(authStore);
+
 const product = ref({});
 
 onMounted(async () => {
@@ -17,6 +22,14 @@ onMounted(async () => {
 async function deleteHandler() {
   await remove(product.value._id);
   router.push(paths.store);
+}
+
+async function addToBagHandler() {
+  if (!isAuthenticated.value) {
+    console.log('please login');
+    return;
+  }
+  addToCart(product.value._id);
 }
 </script>
 
@@ -60,7 +73,7 @@ async function deleteHandler() {
           </div>
 
           <!-- Actions if the User is Owner of the record -->
-          <template v-if="getIsAuth() && user._id === product.owner?._id">
+          <template v-if="isAuthenticated && user._id === product.owner?._id">
             <router-link :to="`/store/${product._id}/edit`">
               <button class="mt-6 flex w-full items-center justify-center rounded-md border border-transparent bg-indigo-600 px-8 py-3 text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
                 Edit
@@ -71,9 +84,9 @@ async function deleteHandler() {
             </button>
           </template>
 
-          <!-- Actions if the User is authenticated and is not the owner of the record -->
+          <!-- Actions if the User is not the owner of the record -->
           <template v-else>
-            <button v-if="product.stock > 0" class="mt-6 flex w-full items-center justify-center rounded-md border border-transparent bg-indigo-600 px-8 py-3 text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
+            <button v-if="product.stock > 0" class="mt-6 flex w-full items-center justify-center rounded-md border border-transparent bg-indigo-600 px-8 py-3 text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2" @click="addToBagHandler">
               Add to bag
             </button>
             <button v-else class="mt-6 flex cursor-default w-full items-center justify-center rounded-md border border-transparent bg-gray-500 px-8 py-3 text-base font-medium text-white focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">

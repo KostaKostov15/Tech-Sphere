@@ -7,14 +7,17 @@ import { storeToRefs } from 'pinia';
 import logo from '../../assets/logo.png';
 
 import { useAuthStore } from '../../store/authStore';
+import { useCartStore } from '../../store/cartStore';
 import Cart from '../Cart.vue';
 import navigation from '../../utils/navigation';
 import { paths } from '../../utils/paths';
 import MobileHeader from './MobileHeader.vue';
 
-const { getIsAuth, logoutUser } = useAuthStore();
+const { logoutUser } = useAuthStore();
+const cartStore = useCartStore();
 const authStore = useAuthStore();
-const { user } = storeToRefs(authStore);
+const { products } = storeToRefs(cartStore);
+const { user, isAuthenticated } = storeToRefs(authStore);
 
 const isOpen = ref(false);
 const isCartOpen = ref(false);
@@ -122,7 +125,7 @@ function changeIsOpen(value) {
 
                 <template v-for="page in navigation.pages">
                   <router-link
-                    v-if="page.validation ? page.validation === getIsAuth() : true"
+                    v-if="page.validation ? page.validation === isAuthenticated : true"
                     :key="page.name"
                     :to="page.to"
                     class="flex items-center text-sm font-medium text-gray-700 hover:text-gray-800"
@@ -134,7 +137,7 @@ function changeIsOpen(value) {
             </PopoverGroup>
 
             <div class="ml-auto flex items-center">
-              <template v-if="!getIsAuth()">
+              <template v-if="!isAuthenticated">
                 <div class="hidden lg:flex lg:flex-1 lg:items-center lg:justify-end lg:space-x-6">
                   <router-link :to="paths.login" class="text-sm font-medium text-gray-700 hover:text-gray-800">
                     Sign in
@@ -156,9 +159,9 @@ function changeIsOpen(value) {
                 </button>
 
                 <div class="ml-4 flow-root lg:ml-6">
-                  <a class="group -m-2 flex items-center p-2" @click="toggleCart">
+                  <a class="cursor-pointer group -m-2 flex items-center p-2" @click="toggleCart">
                     <ShoppingBagIcon class="h-6 w-6 flex-shrink-0 text-gray-400 group-hover:text-gray-500" aria-hidden="true" />
-                    <span class="ml-2 text-sm font-medium text-gray-700 group-hover:text-gray-800">0</span>
+                    <span class="ml-2 text-sm font-medium text-gray-700 group-hover:text-gray-800">{{ products.length }}</span>
                     <span class="sr-only">items in cart, view bag</span>
                   </a>
                 </div>

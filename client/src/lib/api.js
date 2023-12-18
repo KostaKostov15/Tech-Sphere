@@ -57,6 +57,10 @@ export async function put(url, data) {
   return await request(url, getOptions('put', data));
 }
 
+export async function patch(url, data) {
+  return await request(url, getOptions('patch', data));
+}
+
 export async function del(url) {
   return await request(url, getOptions('delete'));
 }

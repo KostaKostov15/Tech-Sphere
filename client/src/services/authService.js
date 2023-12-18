@@ -32,3 +32,9 @@ export async function getById(userId) {
 
   return result;
 }
+
+export async function addToUserCart(productId) {
+  const result = await request.put(`${host}/users/cart-items`, { productId });
+
+  return result;
+}

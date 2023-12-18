@@ -13,7 +13,6 @@ export const useAuthStore = defineStore('auth', {
 
       // update pinia state
       this.user = user;
-
       this.isAuthenticated = true;
 
       // store user details and jwt in local storage to keep user logged in between page refreshes
@@ -23,7 +22,6 @@ export const useAuthStore = defineStore('auth', {
       const user = await login(email, password);
 
       this.user = user;
-
       this.isAuthenticated = true;
 
       localStorage.setItem('auth', JSON.stringify(user));
@@ -31,7 +29,9 @@ export const useAuthStore = defineStore('auth', {
     async logoutUser() {
       this.user = null;
       this.isAuthenticated = false;
+
       localStorage.removeItem('auth');
+      localStorage.removeItem('cart');
     },
     getIsAuth() {
       return this.isAuthenticated;
