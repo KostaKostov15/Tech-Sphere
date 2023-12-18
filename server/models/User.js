@@ -19,7 +19,6 @@ const userSchema = new Schema(
             trim: true,
         },
         imageUrl: { type: String },
-        cartItems: [{ type: ObjectId, ref: 'Product' }],
     },
     { timestamps: true }
 );

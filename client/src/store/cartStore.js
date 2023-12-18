@@ -11,7 +11,7 @@ export const useCartStore = defineStore('cart', {
       return state.products.length;
     },
     getTotalPrice: (state) => {
-      return state.products.reduce((acc, currVal) => acc + (currVal.product.price * currVal.quantity), 0);
+      return state.products.reduce((acc, currVal) => acc + ((((100 - currVal.product.discount) / 100) * currVal.product.price) * currVal.quantity), 0);
     },
   },
   actions: {

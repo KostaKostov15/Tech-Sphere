@@ -21,14 +21,13 @@ async function register(email, username, password) {
         username,
         hashedPassword: await bcrypt.hash(password, 10),
         imageUrl: '',
-        cartItems: [],
     });
 
     return createToken(user);
 }
 
 async function login(email, password) {
-    const user = await User.findOne({ email }).collation({ locale: 'en', strength: 2 }).populate('cartItems');
+    const user = await User.findOne({ email }).collation({ locale: 'en', strength: 2 });
     if (!user) {
         throw new Error('Incorrect email or password');
     }
@@ -42,7 +41,7 @@ async function login(email, password) {
 }
 
 async function getById(userId) {
-    return User.findById({ _id: userId }).populate('cartItems');
+    return User.findById({ _id: userId });
 }
 
 async function logout(token) {
@@ -60,7 +59,6 @@ function createToken(user) {
         email: user.email,
         accessToken: jwt.sign(payload, secret, { expiresIn: '5d' }),
         imageUrl: user.imageUrl,
-        cartItems: user.cartItems,
     };
     return token;
 }

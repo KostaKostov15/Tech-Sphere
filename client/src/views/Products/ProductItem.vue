@@ -20,7 +20,9 @@ const props = defineProps({ product: Object });
         </p>
       </div>
       <p class="text-sm font-medium text-gray-900">
-        $ {{ props.product.price }}
+        <span v-if="props.product.discount" class="mr-2 text-sm font-bold text-red-600 bg-red-200 rounded p-1">-{{ props.product.discount }}%</span>
+        <span v-if="props.product.discount" class="line-through mr-1 text-sm font-medium text-gray-900">${{ props.product.price }}</span>
+        ${{ (((100 - props.product.discount) / 100) * props.product.price).toFixed(2) }}
       </p>
     </div>
   </div>

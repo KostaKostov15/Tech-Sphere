@@ -53,8 +53,14 @@ async function addToBagHandler() {
           <h2 class="sr-only">
             Product information
           </h2>
+          <!-- <p class="mt-2 text-3xl tracking-tight text-gray-900">
+            ${{ product.price }}
+          </p> -->
+
           <p class="mt-2 text-3xl tracking-tight text-gray-900">
-            $ {{ product.price }}
+            <span v-if="product.discount" class="mr-2 text-xl text-red-600 bg-red-200 rounded px-2 py-1">-{{ product.discount }}%</span>
+            <span v-if="product.discount" class="line-through mr-1 text-xl text-gray-900">${{ product.price }}</span>
+            ${{ (((100 - product.discount) / 100) * product.price).toFixed(2) }}
           </p>
 
           <!-- Reviews -->
