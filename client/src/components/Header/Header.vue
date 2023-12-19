@@ -90,7 +90,7 @@ function changeIsOpen(value) {
                       <div class="relative bg-white">
                         <div class="mx-auto max-w-7xl px-8">
                           <div class="grid grid-cols-2 gap-x-8 gap-y-10 py-16">
-                            <div class="col-start-2 grid grid-cols-2 gap-x-8">
+                            <div class="col-start-0 grid grid-cols-2 gap-x-8">
                               <div v-for="item in category.featured" :key="item.name" class="group relative text-base sm:text-sm">
                                 <div class="aspect-h-1 aspect-w-1 overflow-hidden rounded-lg bg-gray-100 group-hover:opacity-75">
                                   <img :src="item.imageSrc" :alt="item.imageAlt" class="object-cover object-center">
@@ -104,7 +104,7 @@ function changeIsOpen(value) {
                                 </p>
                               </div>
                             </div>
-                            <div class="row-start-1 grid grid-cols-3 gap-x-8 gap-y-10 text-sm">
+                            <!-- <div class="row-start-1 grid grid-cols-3 gap-x-8 gap-y-10 text-sm">
                               <div v-for="section in category.sections" :key="section.name">
                                 <p :id="`${section.name}-heading`" class="font-medium text-gray-900">
                                   {{ section.name }}
@@ -115,7 +115,7 @@ function changeIsOpen(value) {
                                   </li>
                                 </ul>
                               </div>
-                            </div>
+                            </div> -->
                           </div>
                         </div>
                       </div>

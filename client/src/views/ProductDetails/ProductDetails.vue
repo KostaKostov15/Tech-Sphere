@@ -26,7 +26,7 @@ async function deleteHandler() {
 
 async function addToBagHandler() {
   if (!isAuthenticated.value) {
-    console.log('please login');
+    router.push(paths.login);
     return;
   }
   addToCart(product.value._id);
@@ -53,9 +53,6 @@ async function addToBagHandler() {
           <h2 class="sr-only">
             Product information
           </h2>
-          <!-- <p class="mt-2 text-3xl tracking-tight text-gray-900">
-            ${{ product.price }}
-          </p> -->
 
           <p class="mt-2 text-3xl tracking-tight text-gray-900">
             <span v-if="product.discount" class="mr-2 text-xl text-red-600 bg-red-200 rounded px-2 py-1">-{{ product.discount }}%</span>

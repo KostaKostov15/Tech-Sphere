@@ -11,137 +11,19 @@ import {
   TransitionRoot,
 } from '@headlessui/vue';
 import { XMarkIcon } from '@heroicons/vue/24/outline';
+
+import { storeToRefs } from 'pinia';
 import { paths } from '../../utils/paths';
+import navigation from '../../utils/navigation';
+import { useAuthStore } from '../../store/authStore';
 
 const props = defineProps({
   isOpen: Boolean,
 });
-
 const emit = defineEmits(['changeIsOpen']);
 
-const navigation = {
-  categories: [
-    {
-      id: 'women',
-      name: 'Women',
-      featured: [
-        {
-          name: 'New Arrivals',
-          href: '#',
-          imageSrc: 'https://tailwindui.com/img/ecommerce-images/mega-menu-category-01.jpg',
-          imageAlt: 'Models sitting back to back, wearing Basic Tee in black and bone.',
-        },
-        {
-          name: 'Basic Tees',
-          href: '#',
-          imageSrc: 'https://tailwindui.com/img/ecommerce-images/mega-menu-category-02.jpg',
-          imageAlt: 'Close up of Basic Tee fall bundle with off-white, ochre, olive, and black tees.',
-        },
-      ],
-      sections: [
-        {
-          id: 'clothing',
-          name: 'Clothing',
-          items: [
-            { name: 'Tops', href: '#' },
-            { name: 'Dresses', href: '#' },
-            { name: 'Pants', href: '#' },
-            { name: 'Denim', href: '#' },
-            { name: 'Sweaters', href: '#' },
-            { name: 'T-Shirts', href: '#' },
-            { name: 'Jackets', href: '#' },
-            { name: 'Activewear', href: '#' },
-            { name: 'Browse All', href: '#' },
-          ],
-        },
-        {
-          id: 'accessories',
-          name: 'Accessories',
-          items: [
-            { name: 'Watches', href: '#' },
-            { name: 'Wallets', href: '#' },
-            { name: 'Bags', href: '#' },
-            { name: 'Sunglasses', href: '#' },
-            { name: 'Hats', href: '#' },
-            { name: 'Belts', href: '#' },
-          ],
-        },
-        {
-          id: 'brands',
-          name: 'Brands',
-          items: [
-            { name: 'Full Nelson', href: '#' },
-            { name: 'My Way', href: '#' },
-            { name: 'Re-Arranged', href: '#' },
-            { name: 'Counterfeit', href: '#' },
-            { name: 'Significant Other', href: '#' },
-          ],
-        },
-      ],
-    },
-    {
-      id: 'men',
-      name: 'Men',
-      featured: [
-        {
-          name: 'New Arrivals',
-          href: '#',
-          imageSrc: 'https://tailwindui.com/img/ecommerce-images/product-page-04-detail-product-shot-01.jpg',
-          imageAlt: 'Drawstring top with elastic loop closure and textured interior padding.',
-        },
-        {
-          name: 'Artwork Tees',
-          href: '#',
-          imageSrc: 'https://tailwindui.com/img/ecommerce-images/category-page-02-image-card-06.jpg',
-          imageAlt:
-            'Three shirts in gray, white, and blue arranged on table with same line drawing of hands and shapes overlapping on front of shirt.',
-        },
-      ],
-      sections: [
-        {
-          id: 'clothing',
-          name: 'Clothing',
-          items: [
-            { name: 'Tops', href: '#' },
-            { name: 'Pants', href: '#' },
-            { name: 'Sweaters', href: '#' },
-            { name: 'T-Shirts', href: '#' },
-            { name: 'Jackets', href: '#' },
-            { name: 'Activewear', href: '#' },
-            { name: 'Browse All', href: '#' },
-          ],
-        },
-        {
-          id: 'accessories',
-          name: 'Accessories',
-          items: [
-            { name: 'Watches', href: '#' },
-            { name: 'Wallets', href: '#' },
-            { name: 'Bags', href: '#' },
-            { name: 'Sunglasses', href: '#' },
-            { name: 'Hats', href: '#' },
-            { name: 'Belts', href: '#' },
-          ],
-        },
-        {
-          id: 'brands',
-          name: 'Brands',
-          items: [
-            { name: 'Re-Arranged', href: '#' },
-            { name: 'Counterfeit', href: '#' },
-            { name: 'Full Nelson', href: '#' },
-            { name: 'My Way', href: '#' },
-          ],
-        },
-      ],
-    },
-  ],
-  pages: [
-    { name: 'Company', to: '#' },
-    { name: 'Stores', to: '#' },
-    { name: 'Add Product', to: paths.addProduct },
-  ],
-};
+const authStore = useAuthStore();
+const { isAuthenticated } = storeToRefs(authStore);
 </script>
 
 <template>
@@ -226,16 +108,29 @@ const navigation = {
 
             <div class="space-y-6 border-t border-gray-200 px-4 py-6">
               <div v-for="page in navigation.pages" :key="page.name" class="flow-root">
-                <a :href="page.href" class="-m-2 block p-2 font-medium text-gray-900">{{ page.name }}</a>
+                <router-link
+                  v-if="page.validation ? page.validation === isAuthenticated : true"
+                  :to="page.to"
+                  class="-m-2 block p-2 font-medium text-gray-900"
+                >
+                  {{ page.name }}
+                </router-link>
               </div>
             </div>
 
-            <div class="space-y-6 border-t border-gray-200 px-4 py-6">
+            <div v-if="!isAuthenticated" class="space-y-6 border-t border-gray-200 px-4 py-6">
               <div class="flow-root">
-                <a href="#" class="-m-2 block p-2 font-medium text-gray-900">Sign in</a>
+                <router-link
+                  :to="paths.login"
+                  class="-m-2 block p-2 font-medium text-gray-900"
+                >
+                  Sign in
+                </router-link>
               </div>
               <div class="flow-root">
-                <a href="#" class="-m-2 block p-2 font-medium text-gray-900">Create account</a>
+                <router-link :to="paths.register" class="-m-2 block p-2 font-medium text-gray-900">
+                  Create account
+                </router-link>
               </div>
             </div>
           </DialogPanel>
@@ -244,7 +139,3 @@ const navigation = {
     </Dialog>
   </TransitionRoot>
 </template>
-
-<style lang="scss" scoped>
-
-</style>
