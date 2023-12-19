@@ -23,12 +23,11 @@ const userData = reactive({
 const rules = computed(() => ({
   email: { required: helpers.withMessage('Email is required', required), email: helpers.withMessage('Please enter a valid email address', email) },
   username: { required, minLength: minLength(5) },
-  password: { required: helpers.withMessage('Password is required', required),
-minLength: helpers.withMessage(
+  password: { required: helpers.withMessage('Password is required', required), minLength: helpers.withMessage(
     ({ $params }) => `Password must be at least ${$params.min} characters`,
     minLength(6),
   ) },
-  rePassword: { required: helpers.withMessage('Confirm Password is required', required), sameAs: helpers.withMessage(() => `Passwords must be equal`, sameAs(userData.password)) },
+  rePassword: { required: helpers.withMessage('Confirm Password is required', required), sameAs: helpers.withMessage(() => `Passwords don't match`, sameAs(userData.password)) },
 }));
 
 const v$ = useVuelidate(rules, userData);
