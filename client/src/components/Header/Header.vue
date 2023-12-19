@@ -103,8 +103,8 @@ function changeIsOpen(value) {
 
                       <div class="relative bg-white">
                         <div class="mx-auto max-w-7xl px-8">
-                          <div class="grid grid-cols-1 gap-x-8 gap-y-10 py-16">
-                            <div class="grid grid-cols-3 gap-x-8">
+                          <div class="grid grid-cols-1 gap-x-8 gap-y-10 py-8">
+                            <div class="grid grid-cols-5 justify-center gap-x-8">
                               <div v-for="item in featuredItems" :key="item._id" class="group relative text-base sm:text-sm">
                                 <div class="aspect-h-1 aspect-w-1 overflow-hidden rounded-lg bg-gray-100 group-hover:opacity-75">
                                   <img :src="item.imageUrl" :alt="item.title" class="object-cover object-center">
