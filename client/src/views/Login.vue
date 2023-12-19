@@ -8,11 +8,13 @@ import { useAuthStore } from '../store/authStore';
 
 import logo from '../assets/logo.png';
 import { paths } from '../utils/paths';
+import Alert from '../components/Alert.vue';
 
 const { loginUser } = useAuthStore();
 const router = useRouter();
 
 const isLoading = ref(false);
+const errorMsg = ref('');
 
 const userData = reactive({
   email: '',
@@ -21,7 +23,8 @@ const userData = reactive({
 
 const rules = computed(() => ({
   email: { required: helpers.withMessage('Email is required', required), email: helpers.withMessage('Please enter a valid email address', email) },
-  password: { required: helpers.withMessage('Password is required', required), minLength: helpers.withMessage(
+  password: { required: helpers.withMessage('Password is required', required),
+minLength: helpers.withMessage(
     ({
       $params,
     }) => `Password must be at least ${$params.min} characters`,
@@ -36,8 +39,13 @@ async function submitHandler() {
   const isValid = await v$.value.$validate();
 
   if (isValid) {
-    await loginUser(userData.email, userData.password);
-    router.push(paths.home);
+    try {
+      await loginUser(userData.email, userData.password);
+      router.push(paths.home);
+    }
+    catch (err) {
+      errorMsg.value = err.message;
+    }
   }
 
   isLoading.value = false;
@@ -45,6 +53,8 @@ async function submitHandler() {
 </script>
 
 <template>
+  <Alert v-if="errorMsg" :error-message="errorMsg" @clear-error="errorMsg = ''" />
+
   <div class="flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8 bg-white">
     <div class="sm:mx-auto sm:w-full sm:max-w-sm">
       <img class="mx-auto h-16 w-auto" :src="logo" alt="site-logo">
