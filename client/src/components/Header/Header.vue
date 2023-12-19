@@ -4,7 +4,6 @@ import { Popover, PopoverButton, PopoverGroup, PopoverPanel } from '@headlessui/
 import { Bars3Icon, ShoppingBagIcon } from '@heroicons/vue/24/outline';
 import { useRouter } from 'vue-router';
 import { storeToRefs } from 'pinia';
-
 import { useAuthStore } from '../../store/authStore';
 import { useCartStore } from '../../store/cartStore';
 import navigation from '../../utils/navigation';
@@ -14,6 +13,7 @@ import logo from '../../assets/logo.png';
 import { getLatest } from '../../services/productService';
 import MobileHeader from './MobileHeader.vue';
 
+const router = useRouter();
 const { logoutUser } = useAuthStore();
 const cartStore = useCartStore();
 const authStore = useAuthStore();
@@ -23,8 +23,6 @@ const { user, isAuthenticated } = storeToRefs(authStore);
 const isOpen = ref(false);
 const isCartOpen = ref(false);
 const isItemAddedToCart = ref(false);
-
-const router = useRouter();
 const featuredItems = ref([]);
 
 onMounted(async () => {
@@ -35,9 +33,8 @@ onMounted(async () => {
 watch(products, () => {
   isItemAddedToCart.value = true;
   setTimeout(() => {
-    console.log('new item added');
     isItemAddedToCart.value = false;
-  }, 400);
+  }, 300);
 }, { deep: true });
 
 function toggleCart() {
@@ -71,7 +68,7 @@ function changeIsOpen(value) {
 
             <!-- Logo -->
             <div class="ml-4 flex lg:ml-0">
-              <router-link to="/">
+              <router-link :to="paths.home">
                 <span class="sr-only">Tech Sphere</span>
                 <img class="h-8 w-auto" :src="logo" alt="site-logo">
               </router-link>
@@ -112,10 +109,10 @@ function changeIsOpen(value) {
                                 <div class="aspect-h-1 aspect-w-1 overflow-hidden rounded-lg bg-gray-100 group-hover:opacity-75">
                                   <img :src="item.imageUrl" :alt="item.title" class="object-cover object-center">
                                 </div>
-                                <a :href="item.href" class="mt-6 block font-medium text-gray-900">
+                                <router-link :to="`/store/${item._id}/details`" class="mt-6 block font-medium text-gray-900" @click="isOpen = false">
                                   <span class="absolute inset-0 z-10" aria-hidden="true" />
                                   {{ item.title }}
-                                </a>
+                                </router-link>
                                 <p aria-hidden="true" class="mt-1">
                                   Shop now
                                 </p>

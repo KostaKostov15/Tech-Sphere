@@ -1,5 +1,5 @@
 <script setup>
-import { onMounted, ref } from 'vue';
+import { onMounted, ref, watch } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { storeToRefs } from 'pinia';
 import { getById, remove } from '../../services/productService';
@@ -17,6 +17,11 @@ const product = ref({});
 
 onMounted(async () => {
   product.value = await getById(route.params.productId);
+  console.log(route.params.productId);
+});
+
+watch(() => route.params.productId, async (newProductId) => {
+  product.value = await getById(newProductId);
 });
 
 async function deleteHandler() {

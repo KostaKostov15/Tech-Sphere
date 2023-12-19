@@ -5,6 +5,7 @@ import { ExclamationTriangleIcon } from '@heroicons/vue/24/outline';
 
 const props = defineProps({ errorMessage: String });
 const emits = defineEmits(['clearError']);
+
 const open = ref(true);
 
 function closeAlert() {

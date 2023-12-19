@@ -3,15 +3,13 @@ import { computed, reactive, ref } from 'vue';
 import { useRouter } from 'vue-router';
 import useVuelidate from '@vuelidate/core';
 import { email, helpers, minLength, required } from '@vuelidate/validators';
-
 import { useAuthStore } from '../store/authStore';
-
 import logo from '../assets/logo.png';
 import { paths } from '../utils/paths';
 import Alert from '../components/Alert.vue';
 
-const { loginUser } = useAuthStore();
 const router = useRouter();
+const { loginUser } = useAuthStore();
 
 const isLoading = ref(false);
 const errorMsg = ref('');
@@ -23,22 +21,25 @@ const userData = reactive({
 
 const rules = computed(() => ({
   email: { required: helpers.withMessage('Email is required', required), email: helpers.withMessage('Please enter a valid email address', email) },
-  password: { required: helpers.withMessage('Password is required', required),
-minLength: helpers.withMessage(
+  password: { required: helpers.withMessage('Password is required', required), minLength: helpers.withMessage(
     ({
       $params,
     }) => `Password must be at least ${$params.min} characters`,
     minLength(6),
   ) },
 }));
+
 const v$ = useVuelidate(rules, userData);
 
 async function submitHandler() {
   isLoading.value = true;
 
-  const isValid = await v$.value.$validate();
-
-  if (isValid) {
+  v$.value.$touch();
+  if ((v$.value.$invalid)) {
+    console.log('invalid form');
+    return false;
+  }
+  else {
     try {
       await loginUser(userData.email, userData.password);
       router.push(paths.home);

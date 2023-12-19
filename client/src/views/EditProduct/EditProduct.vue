@@ -7,8 +7,8 @@ import { getById, update } from '../../services/productService';
 
 const router = useRouter();
 const route = useRoute();
-const isLoading = ref(false);
 
+const isLoading = ref(false);
 const product = ref({
   category: '',
   brand: '',
@@ -42,8 +42,7 @@ async function submitHandler() {
 
   v$.value.$touch();
   if (v$.value.$invalid) {
-    // eslint-disable-next-line no-alert
-    alert('Invalid Form');
+    console.log('invalid form');
     return false;
   }
   else {

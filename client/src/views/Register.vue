@@ -3,17 +3,16 @@ import { computed, reactive, ref } from 'vue';
 import { useRouter } from 'vue-router';
 import useVuelidate from '@vuelidate/core';
 import { email, helpers, minLength, required, sameAs } from '@vuelidate/validators';
-
 import { useAuthStore } from '../store/authStore';
-
 import logo from '../assets/logo.png';
 import { paths } from '../utils/paths';
+import Alert from '../components/Alert.vue';
 
 const { registerUser } = useAuthStore();
 const router = useRouter();
 
 const isLoading = ref(false);
-
+const errorMsg = ref('');
 const userData = reactive({
   email: '',
   username: '',
@@ -24,12 +23,14 @@ const userData = reactive({
 const rules = computed(() => ({
   email: { required: helpers.withMessage('Email is required', required), email: helpers.withMessage('Please enter a valid email address', email) },
   username: { required, minLength: minLength(5) },
-  password: { required: helpers.withMessage('Password is required', required), minLength: helpers.withMessage(
+  password: { required: helpers.withMessage('Password is required', required),
+minLength: helpers.withMessage(
     ({ $params }) => `Password must be at least ${$params.min} characters`,
     minLength(6),
   ) },
   rePassword: { required: helpers.withMessage('Confirm Password is required', required), sameAs: helpers.withMessage(() => `Passwords must be equal`, sameAs(userData.password)) },
 }));
+
 const v$ = useVuelidate(rules, userData);
 
 async function submitHandler() {
@@ -37,13 +38,17 @@ async function submitHandler() {
 
   v$.value.$touch();
   if (v$.value.$invalid) {
-    // eslint-disable-next-line no-alert
-    alert('Invalid Form');
+    console.log('invalid form');
     return false;
   }
   else {
-    await registerUser(userData.email, userData.username, userData.password);
-    router.push(paths.home);
+    try {
+      await registerUser(userData.email, userData.username, userData.password);
+      router.push(paths.home);
+    }
+    catch (err) {
+      errorMsg.value = err.message;
+    }
   }
 
   isLoading.value = false;
@@ -51,6 +56,7 @@ async function submitHandler() {
 </script>
 
 <template>
+  <Alert v-if="errorMsg" :error-message="errorMsg" @clear-error="errorMsg = ''" />
   <div class="flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8 bg-white">
     <div class="sm:mx-auto sm:w-full sm:max-w-sm">
       <img class="mx-auto h-16 w-auto" :src="logo" alt="site-logo">
