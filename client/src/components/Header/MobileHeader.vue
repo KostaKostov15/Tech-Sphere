@@ -12,10 +12,12 @@ import {
 } from '@headlessui/vue';
 import { XMarkIcon } from '@heroicons/vue/24/outline';
 
+import { onMounted, ref } from 'vue';
 import { storeToRefs } from 'pinia';
 import { paths } from '../../utils/paths';
 import navigation from '../../utils/navigation';
 import { useAuthStore } from '../../store/authStore';
+import { getLatest } from '../../services/productService';
 
 const props = defineProps({
   isOpen: Boolean,
@@ -24,6 +26,12 @@ const emit = defineEmits(['changeIsOpen']);
 
 const authStore = useAuthStore();
 const { isAuthenticated } = storeToRefs(authStore);
+
+const featuredItems = ref([]);
+
+onMounted(async () => {
+  featuredItems.value = await getLatest();
+});
 </script>
 
 <template>
@@ -79,28 +87,18 @@ const { isAuthenticated } = storeToRefs(authStore);
               <TabPanels as="template">
                 <TabPanel v-for="category in navigation.categories" :key="category.name" class="space-y-10 px-4 pb-8 pt-10">
                   <div class="grid grid-cols-2 gap-x-4">
-                    <div v-for="item in category.featured" :key="item.name" class="group relative text-sm">
+                    <div v-for="item in featuredItems" :key="item.title" class="group relative text-sm">
                       <div class="aspect-h-1 aspect-w-1 overflow-hidden rounded-lg bg-gray-100 group-hover:opacity-75">
-                        <img :src="item.imageSrc" :alt="item.imageAlt" class="object-cover object-center">
+                        <img :src="item.imageUrl" :alt="item.title" class="object-cover object-center">
                       </div>
-                      <a :href="item.href" class="mt-6 block font-medium text-gray-900">
+                      <router-link :to="`/store/${item._id}/details`" class="mt-6 block font-medium text-gray-900">
                         <span class="absolute inset-0 z-10" aria-hidden="true" />
-                        {{ item.name }}
-                      </a>
+                        {{ item.title }}
+                      </router-link>
                       <p aria-hidden="true" class="mt-1">
                         Shop now
                       </p>
                     </div>
-                  </div>
-                  <div v-for="section in category.sections" :key="section.name">
-                    <p :id="`${category.id}-${section.id}-heading-mobile`" class="font-medium text-gray-900">
-                      {{ section.name }}
-                    </p>
-                    <ul role="list" :aria-labelledby="`${category.id}-${section.id}-heading-mobile`" class="mt-6 flex flex-col space-y-6">
-                      <li v-for="item in section.items" :key="item.name" class="flow-root">
-                        <a :href="item.href" class="-m-2 block p-2 text-gray-500">{{ item.name }}</a>
-                      </li>
-                    </ul>
                   </div>
                 </TabPanel>
               </TabPanels>

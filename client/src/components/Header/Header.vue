@@ -1,16 +1,17 @@
 <script setup>
-import { ref } from 'vue';
+import { onMounted, ref } from 'vue';
 import { Popover, PopoverButton, PopoverGroup, PopoverPanel } from '@headlessui/vue';
 import { Bars3Icon, ShoppingBagIcon } from '@heroicons/vue/24/outline';
 import { useRouter } from 'vue-router';
 import { storeToRefs } from 'pinia';
-import logo from '../../assets/logo.png';
 
 import { useAuthStore } from '../../store/authStore';
 import { useCartStore } from '../../store/cartStore';
-import Cart from '../Cart.vue';
 import navigation from '../../utils/navigation';
 import { paths } from '../../utils/paths';
+import Cart from '../Cart.vue';
+import logo from '../../assets/logo.png';
+import { getLatest } from '../../services/productService';
 import MobileHeader from './MobileHeader.vue';
 
 const { logoutUser } = useAuthStore();
@@ -22,6 +23,12 @@ const { user, isAuthenticated } = storeToRefs(authStore);
 const isOpen = ref(false);
 const isCartOpen = ref(false);
 const router = useRouter();
+const featuredItems = ref([]);
+
+onMounted(async () => {
+  featuredItems.value = await getLatest();
+  navigation.categories.featured = featuredItems.value;
+});
 
 function toggleCart() {
   isCartOpen.value = !isCartOpen.value;
@@ -89,20 +96,32 @@ function changeIsOpen(value) {
 
                       <div class="relative bg-white">
                         <div class="mx-auto max-w-7xl px-8">
-                          <div class="grid grid-cols-2 gap-x-8 gap-y-10 py-16">
+                          <div class="grid grid-cols-3 gap-x-8 gap-y-10 py-16">
                             <div class="col-start-0 grid grid-cols-2 gap-x-8">
-                              <div v-for="item in category.featured" :key="item.name" class="group relative text-base sm:text-sm">
+                              <div v-for="item in featuredItems" :key="item._id" class="group relative text-base sm:text-sm">
                                 <div class="aspect-h-1 aspect-w-1 overflow-hidden rounded-lg bg-gray-100 group-hover:opacity-75">
-                                  <img :src="item.imageSrc" :alt="item.imageAlt" class="object-cover object-center">
+                                  <img :src="item.imageUrl" :alt="item.title" class="object-cover object-center">
                                 </div>
                                 <a :href="item.href" class="mt-6 block font-medium text-gray-900">
                                   <span class="absolute inset-0 z-10" aria-hidden="true" />
-                                  {{ item.name }}
+                                  {{ item.title }}
                                 </a>
                                 <p aria-hidden="true" class="mt-1">
                                   Shop now
                                 </p>
                               </div>
+                              <!-- <div v-for="item in category.featured" :key="item._id" class="group relative text-base sm:text-sm">
+                                <div class="aspect-h-1 aspect-w-1 overflow-hidden rounded-lg bg-gray-100 group-hover:opacity-75">
+                                  <img :src="item.imageUrl" :alt="item.title" class="object-cover object-center">
+                                </div>
+                                <a :href="item.href" class="mt-6 block font-medium text-gray-900">
+                                  <span class="absolute inset-0 z-10" aria-hidden="true" />
+                                  {{ item.title }}
+                                </a>
+                                <p aria-hidden="true" class="mt-1">
+                                  Shop now
+                                </p>
+                              </div> -->
                             </div>
                             <!-- <div class="row-start-1 grid grid-cols-3 gap-x-8 gap-y-10 text-sm">
                               <div v-for="section in category.sections" :key="section.name">

@@ -46,7 +46,7 @@ async function addToBagHandler() {
 
         <!-- Options -->
         <div class="lg:row-span-3 lg:mt-0">
-          <div class="aspect-h-4 aspect-w-3 hidden overflow-hidden rounded-lg lg:block">
+          <div class="aspect-h-4 aspect-w-3 overflow-hidden rounded-lg lg:block">
             <img :src="product.imageUrl" :alt="product.title" class="h-full w-full object-cover object-center">
           </div>
 
