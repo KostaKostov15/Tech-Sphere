@@ -2,6 +2,7 @@
 import { onMounted, ref, watch } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { storeToRefs } from 'pinia';
+import Modal from '../../components/Modal.vue';
 import { getById, remove } from '../../services/productService';
 import { useAuthStore } from '../../store/authStore';
 import { useCartStore } from '../../store/cartStore';
@@ -15,6 +16,7 @@ const authStore = useAuthStore();
 const { user, isAuthenticated } = storeToRefs(authStore);
 
 const product = ref({});
+const deleteModalOpen = ref(false);
 
 onMounted(async () => {
   product.value = await getById(route.params.productId);
@@ -25,8 +27,15 @@ watch(() => route.params.productId, async (newProductId) => {
 });
 
 async function deleteHandler() {
-  await remove(product.value._id);
-  router.push(paths.store);
+  try {
+    await remove(product.value._id);
+    router.push(paths.store);
+  }
+  catch (err) {
+    console.log(err.message);
+  }
+
+  deleteModalOpen.value = false;
 }
 
 async function addToBagHandler() {
@@ -39,6 +48,7 @@ async function addToBagHandler() {
 </script>
 
 <template>
+  <Modal v-if="deleteModalOpen" :delete-handler="deleteHandler" />
   <div class="bg-white">
     <div class="pt-4">
       <!-- Product info -->
@@ -87,7 +97,7 @@ async function addToBagHandler() {
                 Edit
               </button>
             </router-link>
-            <button class="mt-2 flex w-full items-center justify-center rounded-md border border-transparent bg-red-600 px-8 py-3 text-base font-medium text-white hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2" @click="deleteHandler">
+            <button class="mt-2 flex w-full items-center justify-center rounded-md border border-transparent bg-red-600 px-8 py-3 text-base font-medium text-white hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2" @click="deleteModalOpen = true">
               Delete
             </button>
           </template>
