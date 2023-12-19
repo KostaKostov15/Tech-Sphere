@@ -1,5 +1,5 @@
 <script setup>
-import { onMounted, ref } from 'vue';
+import { onMounted, ref, watch } from 'vue';
 import { Popover, PopoverButton, PopoverGroup, PopoverPanel } from '@headlessui/vue';
 import { Bars3Icon, ShoppingBagIcon } from '@heroicons/vue/24/outline';
 import { useRouter } from 'vue-router';
@@ -22,6 +22,8 @@ const { user, isAuthenticated } = storeToRefs(authStore);
 
 const isOpen = ref(false);
 const isCartOpen = ref(false);
+const isItemAddedToCart = ref(false);
+
 const router = useRouter();
 const featuredItems = ref([]);
 
@@ -29,6 +31,14 @@ onMounted(async () => {
   featuredItems.value = await getLatest();
   navigation.categories.featured = featuredItems.value;
 });
+
+watch(products, () => {
+  isItemAddedToCart.value = true;
+  setTimeout(() => {
+    console.log('new item added');
+    isItemAddedToCart.value = false;
+  }, 400);
+}, { deep: true });
 
 function toggleCart() {
   isCartOpen.value = !isCartOpen.value;
@@ -96,8 +106,8 @@ function changeIsOpen(value) {
 
                       <div class="relative bg-white">
                         <div class="mx-auto max-w-7xl px-8">
-                          <div class="grid grid-cols-3 gap-x-8 gap-y-10 py-16">
-                            <div class="col-start-0 grid grid-cols-2 gap-x-8">
+                          <div class="grid grid-cols-1 gap-x-8 gap-y-10 py-16">
+                            <div class="grid grid-cols-3 gap-x-8">
                               <div v-for="item in featuredItems" :key="item._id" class="group relative text-base sm:text-sm">
                                 <div class="aspect-h-1 aspect-w-1 overflow-hidden rounded-lg bg-gray-100 group-hover:opacity-75">
                                   <img :src="item.imageUrl" :alt="item.title" class="object-cover object-center">
@@ -110,31 +120,7 @@ function changeIsOpen(value) {
                                   Shop now
                                 </p>
                               </div>
-                              <!-- <div v-for="item in category.featured" :key="item._id" class="group relative text-base sm:text-sm">
-                                <div class="aspect-h-1 aspect-w-1 overflow-hidden rounded-lg bg-gray-100 group-hover:opacity-75">
-                                  <img :src="item.imageUrl" :alt="item.title" class="object-cover object-center">
-                                </div>
-                                <a :href="item.href" class="mt-6 block font-medium text-gray-900">
-                                  <span class="absolute inset-0 z-10" aria-hidden="true" />
-                                  {{ item.title }}
-                                </a>
-                                <p aria-hidden="true" class="mt-1">
-                                  Shop now
-                                </p>
-                              </div> -->
                             </div>
-                            <!-- <div class="row-start-1 grid grid-cols-3 gap-x-8 gap-y-10 text-sm">
-                              <div v-for="section in category.sections" :key="section.name">
-                                <p :id="`${section.name}-heading`" class="font-medium text-gray-900">
-                                  {{ section.name }}
-                                </p>
-                                <ul role="list" :aria-labelledby="`${section.name}-heading`" class="mt-6 space-y-6 sm:mt-4 sm:space-y-4">
-                                  <li v-for="item in section.items" :key="item.name" class="flex">
-                                    <a :href="item.href" class="hover:text-gray-800">{{ item.name }}</a>
-                                  </li>
-                                </ul>
-                              </div>
-                            </div> -->
                           </div>
                         </div>
                       </div>
@@ -179,7 +165,7 @@ function changeIsOpen(value) {
 
                 <div class="ml-4 flow-root lg:ml-6">
                   <a class="cursor-pointer group -m-2 flex items-center p-2" @click="toggleCart">
-                    <ShoppingBagIcon class="h-6 w-6 flex-shrink-0 text-gray-400 group-hover:text-gray-500" aria-hidden="true" />
+                    <ShoppingBagIcon :class="isItemAddedToCart ? 'text-green-400 transition h-8 w-8' : 'text-gray-400'" class="h-6 w-6 flex-shrink-0 group-hover:text-gray-500" aria-hidden="true" />
                     <span class="ml-2 text-sm font-medium text-gray-700 group-hover:text-gray-800">{{ products.length }}</span>
                     <span class="sr-only">items in cart, view bag</span>
                   </a>

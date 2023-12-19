@@ -5,7 +5,7 @@ async function getAll() {
 }
 
 async function getLatest() {
-    return Product.find().sort({ createdAt: -1 }).limit(2);
+    return Product.find().sort({ createdAt: -1 }).limit(3);
 }
 
 async function getById(id) {

@@ -86,7 +86,7 @@ onMounted(async () => {
               </div>
               <TabPanels as="template">
                 <TabPanel v-for="category in navigation.categories" :key="category.name" class="space-y-10 px-4 pb-8 pt-10">
-                  <div class="grid grid-cols-2 gap-x-4">
+                  <div class="grid grid-cols-3 gap-x-4">
                     <div v-for="item in featuredItems" :key="item.title" class="group relative text-sm">
                       <div class="aspect-h-1 aspect-w-1 overflow-hidden rounded-lg bg-gray-100 group-hover:opacity-75">
                         <img :src="item.imageUrl" :alt="item.title" class="object-cover object-center">
