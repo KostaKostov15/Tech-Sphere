@@ -110,6 +110,7 @@ onMounted(async () => {
                   v-if="page.validation ? page.validation === isAuthenticated : true"
                   :to="page.to"
                   class="-m-2 block p-2 font-medium text-gray-900"
+                  @click="emit('changeIsOpen', false)"
                 >
                   {{ page.name }}
                 </router-link>
