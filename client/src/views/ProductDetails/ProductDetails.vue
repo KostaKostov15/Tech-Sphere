@@ -6,6 +6,7 @@ import { getById, remove } from '../../services/productService';
 import { useAuthStore } from '../../store/authStore';
 import { useCartStore } from '../../store/cartStore';
 import { paths } from '../../utils/paths';
+import dateFormatter from '../../utils/dateFormatter';
 
 const route = useRoute();
 const router = useRouter();
@@ -17,7 +18,6 @@ const product = ref({});
 
 onMounted(async () => {
   product.value = await getById(route.params.productId);
-  console.log(route.params.productId);
 });
 
 watch(() => route.params.productId, async (newProductId) => {
@@ -139,6 +139,18 @@ async function addToBagHandler() {
             <div class="mt-4 pl-2 space-y-6">
               <p class="text-gray-600 text-sm">
                 {{ product.description }}
+              </p>
+            </div>
+          </div>
+
+          <div class="mt-10">
+            <h3 class="text-sm font-medium text-gray-900">
+              Creation Info
+            </h3>
+
+            <div class="mt-4 pl-2 space-y-6">
+              <p class="text-gray-600 text-sm">
+                Created by <span class="font-medium">{{ product.owner?.email }}</span> on  <span class="font-medium">{{ dateFormatter(product.createdAt) }}</span>
               </p>
             </div>
           </div>

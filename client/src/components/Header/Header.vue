@@ -109,7 +109,7 @@ function changeIsOpen(value) {
                                 <div class="aspect-h-1 aspect-w-1 overflow-hidden rounded-lg bg-gray-100 group-hover:opacity-75">
                                   <img :src="item.imageUrl" :alt="item.title" class="object-cover object-center">
                                 </div>
-                                <router-link :to="`/store/${item._id}/details`" class="mt-6 block font-medium text-gray-900" @click="isOpen = false">
+                                <router-link :to="`/store/${item._id}/details`" class="mt-6 block font-medium text-gray-900">
                                   <span class="absolute inset-0 z-10" aria-hidden="true" />
                                   {{ item.title }}
                                 </router-link>

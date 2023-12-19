@@ -1,5 +1,11 @@
 <script setup>
+import { storeToRefs } from 'pinia';
+import { CheckBadgeIcon } from '@heroicons/vue/24/outline';
+import { useAuthStore } from '../../store/authStore';
+
 const props = defineProps({ product: Object });
+const authStore = useAuthStore();
+const { user } = storeToRefs(authStore);
 </script>
 
 <template>
@@ -11,7 +17,7 @@ const props = defineProps({ product: Object });
       <div>
         <h3 class="text-sm text-gray-700">
           <router-link :to="`/store/${props.product._id}/details`">
-            <span aria-hidden="true" class="absolute inset-0" />
+            <span aria-hidden="true" class="absolute inset-0"><CheckBadgeIcon v-if="props.product.owner === user._id" class="text-sky-600 h-6 w-6" /></span>
             {{ props.product.title }}
           </router-link>
         </h3>
