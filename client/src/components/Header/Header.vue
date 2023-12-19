@@ -18,7 +18,7 @@ const { logoutUser } = useAuthStore();
 const cartStore = useCartStore();
 const authStore = useAuthStore();
 const { products } = storeToRefs(cartStore);
-const { user, isAuthenticated } = storeToRefs(authStore);
+const { isAuthenticated } = storeToRefs(authStore);
 
 const isOpen = ref(false);
 const isCartOpen = ref(false);
@@ -153,9 +153,11 @@ function changeIsOpen(value) {
               </template>
 
               <template v-else>
-                <p class="mr-8 flex items-center text-sm font-medium text-gray-700 hover:text-gray-800">
-                  {{ user.email }}
-                </p>
+                <router-link :to="paths.profile">
+                  <p class="mr-6 flex items-center text-sm font-medium text-gray-700 hover:text-gray-800">
+                    Profile
+                  </p>
+                </router-link>
                 <button class="text-sm font-medium text-gray-700 hover:text-gray-800" @click="logoutHandler">
                   Logout
                 </button>
@@ -171,14 +173,6 @@ function changeIsOpen(value) {
 
               <!-- Cart -->
               <Cart v-if="isCartOpen" />
-
-              <!-- Search -->
-              <!-- <div class="flex lg:ml-6">
-                <a href="#" class="p-2 text-gray-400 hover:text-gray-500">
-                  <span class="sr-only">Search</span>
-                  <MagnifyingGlassIcon class="h-6 w-6" aria-hidden="true" />
-                </a>
-              </div>  -->
             </div>
           </div>
         </div>

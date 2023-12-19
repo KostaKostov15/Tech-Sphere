@@ -41,16 +41,3 @@ export async function remove(id) {
 
 //   return result;
 // }
-
-// export async function getByQuery(category, search) {
-//   let result;
-
-//   if (search) {
-//     result = await request.get(`${host}/data/${category}/${search}`);
-//   }
-//   else {
-//     result = await getAll();
-//   }
-
-//   return result;
-// }

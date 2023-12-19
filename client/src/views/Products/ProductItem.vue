@@ -16,8 +16,8 @@ const { user } = storeToRefs(authStore);
     <div class="mt-4 flex justify-between">
       <div>
         <h3 class="text-sm text-gray-700">
-          <router-link :to="`/store/${props.product._id}/details`">
-            <span aria-hidden="true" class="absolute inset-0"><CheckBadgeIcon v-if="props.product.owner === user._id" class="text-sky-600 h-6 w-6" /></span>
+          <router-link :to="`/store/${props.product?._id}/details`">
+            <span aria-hidden="true" class="absolute inset-0"><CheckBadgeIcon v-if="props.product?.owner === user?._id" class="text-sky-600 h-6 w-6" /></span>
             {{ props.product.title }}
           </router-link>
         </h3>
