@@ -14,6 +14,7 @@ import { getLatest } from '../../services/productService';
 import MobileHeader from './MobileHeader.vue';
 
 const router = useRouter();
+const { clearCart } = useCartStore();
 const { logoutUser } = useAuthStore();
 const cartStore = useCartStore();
 const authStore = useAuthStore();
@@ -43,6 +44,7 @@ function toggleCart() {
 
 async function logoutHandler() {
   await logoutUser();
+  clearCart();
 
   router.push(paths.home);
 }
